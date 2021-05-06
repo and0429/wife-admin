@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.GrossProfitListStatisticsMapper">
+    
+    <resultMap type="GrossProfitListStatistics" id="GrossProfitListStatisticsResult">
+        <result property="id"    column="id_"    />
+        <result property="name"    column="name_"    />
+        <result property="format"    column="format_"    />
+        <result property="category"    column="category_"    />
+        <result property="unit"    column="unit_"    />
+        <result property="count"    column="count_"    />
+        <result property="price"    column="price_"    />
+        <result property="amont"    column="amont_"    />
+    </resultMap>
+
+    <sql id="selectGrossProfitListStatisticsVo">
+        select id_, name_, format_, category_, unit_, count_, price_, amont_ from b_gross_profit_list_statistics
+    </sql>
+
+    <select id="selectGrossProfitListStatisticsList" parameterType="GrossProfitListStatistics" resultMap="GrossProfitListStatisticsResult">
+        <include refid="selectGrossProfitListStatisticsVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name_ like concat('%', #{name}, '%')</if>
+            <if test="format != null  and format != ''"> and format_ like concat('%', #{format}, '%')</if>
+            <if test="category != null  and category != ''"> and category_ like concat('%', #{category}, '%')</if>
+            <if test="unit != null  and unit != ''"> and unit_ like concat('%', #{unit}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectGrossProfitListStatisticsById" parameterType="Long" resultMap="GrossProfitListStatisticsResult">
+        <include refid="selectGrossProfitListStatisticsVo"/>
+        where id_ = #{id}
+    </select>
+        
+    <insert id="save" parameterType="GrossProfitListStatistics" useGeneratedKeys="true" keyProperty="id">
+        insert into b_gross_profit_list_statistics
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name_,</if>
+            <if test="format != null and format != ''">format_,</if>
+            <if test="category != null and category != ''">category_,</if>
+            <if test="unit != null and unit != ''">unit_,</if>
+            <if test="count != null">count_,</if>
+            <if test="price != null">price_,</if>
+            <if test="amont != null">amont_,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="format != null and format != ''">#{format},</if>
+            <if test="category != null and category != ''">#{category},</if>
+            <if test="unit != null and unit != ''">#{unit},</if>
+            <if test="count != null">#{count},</if>
+            <if test="price != null">#{price},</if>
+            <if test="amont != null">#{amont},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGrossProfitListStatistics" parameterType="GrossProfitListStatistics">
+        update b_gross_profit_list_statistics
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name_ = #{name},</if>
+            <if test="format != null and format != ''">format_ = #{format},</if>
+            <if test="category != null and category != ''">category_ = #{category},</if>
+            <if test="unit != null and unit != ''">unit_ = #{unit},</if>
+            <if test="count != null">count_ = #{count},</if>
+            <if test="price != null">price_ = #{price},</if>
+            <if test="amont != null">amont_ = #{amont},</if>
+        </trim>
+        where id_ = #{id}
+    </update>
+
+    <delete id="deleteGrossProfitListStatisticsById" parameterType="Long">
+        delete from b_gross_profit_list_statistics where id_ = #{id}
+    </delete>
+
+    <delete id="deleteGrossProfitListStatisticsByIds" parameterType="String">
+        delete from b_gross_profit_list_statistics where id_ in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

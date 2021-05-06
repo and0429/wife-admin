@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.StandardItemMapper">
+    
+    <resultMap type="StandardItem" id="StandardItemResult">
+        <result property="id"    column="id_"    />
+        <result property="name"    column="name_"    />
+        <result property="format"    column="format_"    />
+        <result property="unit"    column="unit"    />
+    </resultMap>
+
+    <sql id="selectStandardItemVo">
+        select id_, name_, format_, unit from b_standard_item
+    </sql>
+
+    <select id="selectStandardItemList" parameterType="StandardItem" resultMap="StandardItemResult">
+        <include refid="selectStandardItemVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name_ like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectStandardItemById" parameterType="Long" resultMap="StandardItemResult">
+        <include refid="selectStandardItemVo"/>
+        where id_ = #{id}
+    </select>
+        
+    <insert id="insertStandardItem" parameterType="StandardItem" useGeneratedKeys="true" keyProperty="id">
+        insert into b_standard_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name_,</if>
+            <if test="format != null and format != ''">format_,</if>
+            <if test="unit != null and unit != ''">unit,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="format != null and format != ''">#{format},</if>
+            <if test="unit != null and unit != ''">#{unit},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStandardItem" parameterType="StandardItem">
+        update b_standard_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name_ = #{name},</if>
+            <if test="format != null and format != ''">format_ = #{format},</if>
+            <if test="unit != null and unit != ''">unit = #{unit},</if>
+        </trim>
+        where id_ = #{id}
+    </update>
+
+    <delete id="deleteStandardItemById" parameterType="Long">
+        delete from b_standard_item where id_ = #{id}
+    </delete>
+
+    <delete id="deleteStandardItemByIds" parameterType="String">
+        delete from b_standard_item where id_ in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

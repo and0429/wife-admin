@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.GrossProfitListMapper">
+    
+    <resultMap type="GrossProfitList" id="GrossProfitListResult">
+        <result property="id"    column="id_"    />
+        <result property="name"    column="name_"    />
+        <result property="format"    column="format_"    />
+        <result property="category"    column="category_"    />
+        <result property="unit"    column="unit_"    />
+        <result property="count"    column="count_"    />
+        <result property="price"    column="price_"    />
+        <result property="amont"    column="amont_"    />
+    </resultMap>
+
+    <sql id="selectGrossProfitListVo">
+        select id_, name_, format_, category_, unit_, count_, price_, amont_ from b_gross_profit_list
+    </sql>
+
+    <select id="selectGrossProfitListList" parameterType="GrossProfitList" resultMap="GrossProfitListResult">
+        <include refid="selectGrossProfitListVo"/>
+        <where>
+            <if test="1 == 1">statistics_id_ is null</if>
+            <if test="name != null  and name != ''"> and name_ like concat('%', #{name}, '%')</if>
+            <if test="format != null  and format != ''"> and format_ like concat('%', #{format}, '%')</if>
+            <if test="category != null  and category != ''"> and category_ like concat('%', #{category}, '%')</if>
+            <if test="unit != null  and unit != ''"> and unit_ like concat('%', #{unit}, '%')</if>
+        </where>
+        order by name_
+    </select>
+    
+    <select id="selectGrossProfitListById" parameterType="Long" resultMap="GrossProfitListResult">
+        <include refid="selectGrossProfitListVo"/>
+        where id_ = #{id}
+    </select>
+
+    <select id="findInIds" resultMap="GrossProfitListResult">
+        <include refid="selectGrossProfitListVo"/>
+        <where>
+            <if test="ids != null and ids.size() != 0">
+                id_ in
+                <foreach collection="ids" open="(" close=")" separator="," item="id">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="ids == null or ids.size() == 0">
+                id_ = -1
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertGrossProfitList" parameterType="GrossProfitList" useGeneratedKeys="true">
+        insert into b_gross_profit_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id_,</if>
+            <if test="name != null and name != ''">name_,</if>
+            <if test="format != null">format_,</if>
+            <if test="category != null">category_,</if>
+            <if test="unit != null">unit_,</if>
+            <if test="count != null">count_,</if>
+            <if test="price != null">price_,</if>
+            <if test="amont != null">amont_,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="format != null">#{format},</if>
+            <if test="category != null">#{category},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="count != null">#{count},</if>
+            <if test="price != null">#{price},</if>
+            <if test="amont != null">#{amont},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGrossProfitList" parameterType="GrossProfitList">
+        update b_gross_profit_list
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name_ = #{name},</if>
+            <if test="format != null">format_ = #{format},</if>
+            <if test="category != null">category_ = #{category},</if>
+            <if test="unit != null">unit_ = #{unit},</if>
+            <if test="count != null">count_ = #{count},</if>
+            <if test="price != null">price_ = #{price},</if>
+            <if test="amont != null">amont_ = #{amont},</if>
+        </trim>
+        where id_ = #{id}
+    </update>
+
+    <update id="updateRefId">
+        update b_gross_profit_list set statistics_id_ = #{refId}
+        <where>
+            <if test="ids != null and ids.size() != 0">
+                id_ in
+                <foreach collection="ids" open="(" close=")" separator="," item="id">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="ids == null or ids.size() == 0">
+                id_ = -1
+            </if>
+        </where>
+    </update>
+
+    <update id="unbindByIds">
+        update b_gross_profit_list set statistics_id_ = null where statistics_id_ in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </update>
+
+    <delete id="deleteGrossProfitListById" parameterType="Long">
+        delete from b_gross_profit_list where id_ = #{id}
+    </delete>
+
+    <delete id="deleteGrossProfitListByIds" parameterType="String">
+        delete from b_gross_profit_list where id_ in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
