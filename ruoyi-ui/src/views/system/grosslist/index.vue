@@ -243,20 +243,22 @@
     </el-dialog>
 
     <!-- 合并对话框对话框 -->
-    <el-dialog :title="'合并条目'" :visible.sync="reduce.open" width="980px" append-to-body>
+    <el-dialog :title="'合并条目'" :visible.sync="reduce.open" width="1000px" append-to-body>
       <el-row style="margin-bottom: 10px; margin-right: 15px; text-align: right">
         <el-button type="primary" @click="doReduce" :disabled="reduce.disabled">合 并</el-button>
       </el-row>
       <el-row>
         <el-form :inline="true" ref="reduceForm" :model="reduce.form" :rules="reduce.rules" label-width="60px">
           <el-form-item label="名称" prop="name">
-            <el-input v-model="reduce.form.name" placeholder="请输入名称"/>
+            <el-input v-model="reduce.form.name" placeholder="请输入名称" ref="reduceFormOfName" @input="debouncedNameInputHandle"
+                      clearable
+            />
           </el-form-item>
           <el-form-item label="规格" prop="format">
-            <el-input v-model="reduce.form.format" placeholder="请输入规格"/>
+            <el-input v-model="reduce.form.format" placeholder="请输入规格" clearable/>
           </el-form-item>
           <el-form-item label="单位" prop="unit">
-            <el-input v-model="reduce.form.unit" placeholder="请输入单位"/>
+            <el-input v-model="reduce.form.unit" placeholder="请输入单位" clearable/>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="addToStandard">添加到标准</el-button>
@@ -328,6 +330,8 @@ import {
 import { getToken } from '@/utils/auth'
 import { listInvstatistics } from '@/api/system/invstatistics'
 import { addItem, listItem } from '@/api/system/item'
+
+import _ from 'lodash';
 
 export default {
   name: 'Grosslist',
@@ -403,6 +407,7 @@ export default {
   created() {
     this.getList()
     this.getInvstatisticsList()
+    this.debouncedNameInputHandle = _.debounce(this.nameInputHandle, 500);
   },
   methods: {
     handleImport() {
@@ -545,6 +550,14 @@ export default {
       this.$refs.upload.submit()
     },
 
+    // 合并时候的name输入改变
+    nameInputHandle() {
+      let name = this.reduce.form.name
+      listItem({ name }).then(respone => {
+        this.standarditem.datas = respone.rows
+      })
+    },
+
     //
     reduceHandle() { // 打开合并模态框
       this.loading = true
@@ -556,11 +569,15 @@ export default {
         this.reduce.open = true
         this.standarditem.datas = respone.rows
         this.loading = false
-        if (this.standarditem.datas.length) {
-          setTimeout(() => {
-            this.$refs.standarditemTable.setCurrentRow(this.standarditem.datas[0])
-          })
-        }
+        setTimeout(() => {
+          this.$refs['reduceFormOfName'].focus()
+        }, 100)
+
+        // if (this.standarditem.datas.length) {
+        //   setTimeout(() => {
+        // this.$refs.standarditemTable.setCurrentRow(this.standarditem.datas[0]) // 不设置默认
+        //   })
+        // }
       })
     },
 
