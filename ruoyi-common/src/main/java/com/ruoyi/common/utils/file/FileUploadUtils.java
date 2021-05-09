@@ -115,7 +115,10 @@ public class FileUploadUtils
         String fileName = extractFilename(file);
 
         File desc = getAbsoluteFile(baseDir, fileName);
-        file.transferTo(desc);
+
+        final File canonicalFile = desc.getCanonicalFile();
+
+        file.transferTo(canonicalFile);
         String pathFileName = getPathFileName(baseDir, fileName);
         return pathFileName;
     }

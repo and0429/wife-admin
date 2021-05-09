@@ -212,7 +212,7 @@
     </el-row>
 
     <!-- 添加或修改毛利列表对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body :close-on-click-modal="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入名称"/>
@@ -243,7 +243,7 @@
     </el-dialog>
 
     <!-- 合并对话框对话框 -->
-    <el-dialog :title="'合并条目'" :visible.sync="reduce.open" width="1000px" append-to-body>
+    <el-dialog :title="'合并条目'" :visible.sync="reduce.open" width="1000px" append-to-body :close-on-click-modal="false">
       <el-row style="margin-bottom: 10px; margin-right: 15px; text-align: right">
         <el-button type="primary" @click="doReduce" :disabled="reduce.disabled">合 并</el-button>
       </el-row>
@@ -283,7 +283,7 @@
     </el-dialog>
 
     <!-- 导入对话框 -->
-    <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px" append-to-body>
+    <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px" append-to-body :close-on-click-modal="false">
       <el-upload
         ref="upload"
         :limit="1"
