@@ -51,3 +51,10 @@ export function exportInvstatistics(query) {
     params: query
   })
 }
+
+export function sum() {
+  return request({
+    url: '/system/invstatistics/amont/suming',
+    method: 'get'
+  })
+}

@@ -37,6 +37,12 @@ public class GrossProfitListController extends BaseController {
         this.tokenService = tokenService;
     }
 
+    @GetMapping("/amont/suming")
+    public AjaxResult amontSum() {
+        return AjaxResult.success(grossProfitListService.amontSum());
+    }
+
+
     @DeleteMapping("/clear")
     public AjaxResult clear() {
         grossProfitListService.clear();
@@ -54,7 +60,7 @@ public class GrossProfitListController extends BaseController {
 
 
     @PostMapping("/moving")
-    public  AjaxResult move(@RequestBody ReduceParams params) {
+    public AjaxResult move(@RequestBody ReduceParams params) {
         grossProfitListService.move(params);
         return AjaxResult.success();
     }

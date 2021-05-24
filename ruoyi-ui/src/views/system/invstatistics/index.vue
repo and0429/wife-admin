@@ -90,6 +90,9 @@
         >导出
         </el-button>
       </el-col>
+      <el-col :span="1.5" style="line-height: 28px;">
+        <span>总金额：</span><span>{{ invstatisticsSum }}</span>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -235,7 +238,8 @@ import {
   delInvstatistics,
   addInvstatistics,
   updateInvstatistics,
-  exportInvstatistics
+  exportInvstatistics,
+  sum
 } from '@/api/system/invstatistics'
 
 export default {
@@ -295,7 +299,8 @@ export default {
         amont: [
           { required: true, message: '实际金额不能为空', trigger: 'blur' }
         ]
-      }
+      },
+      invstatisticsSum: 0
     }
   },
   created() {
@@ -444,6 +449,9 @@ export default {
         this.download(response.msg)
       })
     }
+  },
+  mounted() {
+    sum().then(resp => this.invstatisticsSum = resp.data)
   }
 }
 </script>

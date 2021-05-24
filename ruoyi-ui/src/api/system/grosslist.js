@@ -83,3 +83,10 @@ export function clear() {
     method: 'delete'
   })
 }
+
+export function sum() {
+  return request({
+    url: '/system/grosslist/amont/suming',
+    method: 'get'
+  })
+}

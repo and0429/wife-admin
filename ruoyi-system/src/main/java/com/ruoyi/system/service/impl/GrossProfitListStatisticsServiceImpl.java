@@ -1,16 +1,14 @@
 package com.ruoyi.system.service.impl;
 
+import com.ruoyi.system.domain.GrossProfitListStatistics;
+import com.ruoyi.system.mapper.GrossProfitListMapper;
+import com.ruoyi.system.mapper.GrossProfitListStatisticsMapper;
+import com.ruoyi.system.service.IGrossProfitListStatisticsService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Objects;
-
-import com.ruoyi.system.mapper.GrossProfitListMapper;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.ruoyi.system.mapper.GrossProfitListStatisticsMapper;
-import com.ruoyi.system.domain.GrossProfitListStatistics;
-import com.ruoyi.system.service.IGrossProfitListStatisticsService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 统计列Service业务层处理
@@ -98,5 +96,10 @@ public class GrossProfitListStatisticsServiceImpl implements IGrossProfitListSta
     @Override
     public int deleteGrossProfitListStatisticsById(Long id) {
         return grossProfitListStatisticsMapper.deleteGrossProfitListStatisticsById(id);
+    }
+
+    @Override
+    public Double amontSum() {
+        return grossProfitListStatisticsMapper.amontSum();
     }
 }

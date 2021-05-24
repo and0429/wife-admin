@@ -33,6 +33,12 @@ public class GrossProfitListStatisticsController extends BaseController {
     @Autowired
     private IGrossProfitListStatisticsService grossProfitListStatisticsService;
 
+
+    @GetMapping("/amont/suming")
+    public AjaxResult amontSum() {
+        return AjaxResult.success(grossProfitListStatisticsService.amontSum());
+    }
+
     /**
      * 查询统计列列表
      */

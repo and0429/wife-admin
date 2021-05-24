@@ -86,4 +86,10 @@ public interface IGrossProfitListService {
      * @param params
      */
     void move(ReduceParams params);
+
+    /**
+     * @return
+     */
+    Double amontSum();
+
 }

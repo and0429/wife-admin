@@ -138,6 +138,9 @@
             >移动
             </el-button>
           </el-col>
+          <el-col :span="1.5" style="line-height: 28px">
+            <span>总金额：</span><span>{{ grossSum }}</span>
+          </el-col>
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
         <el-table v-loading="loading"
@@ -188,6 +191,9 @@
       <!--  统计部分表格    -->
       <el-col :span="12">
         <el-row :gutter="10" class="mb8">
+          <el-col :span="20" style="line-height: 28px; text-align: right;">
+            <span>总金额：</span><span>{{ invstatisticsSum }}</span>
+          </el-col>
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" style="visibility: hidden"></right-toolbar>
         </el-row>
         <el-table v-loading="loading" :data="statistics.invstatisticsList">
@@ -250,7 +256,8 @@
       <el-row>
         <el-form :inline="true" ref="reduceForm" :model="reduce.form" :rules="reduce.rules" label-width="60px">
           <el-form-item label="名称" prop="name">
-            <el-input v-model="reduce.form.name" placeholder="请输入名称" ref="reduceFormOfName" @input="debouncedNameInputHandle"
+            <el-input v-model="reduce.form.name" placeholder="请输入名称" ref="reduceFormOfName"
+                      @input="debouncedNameInputHandle"
                       clearable
             />
           </el-form-item>
@@ -283,7 +290,9 @@
     </el-dialog>
 
     <!-- 导入对话框 -->
-    <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px" append-to-body :close-on-click-modal="false">
+    <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px" append-to-body
+               :close-on-click-modal="false"
+    >
       <el-upload
         ref="upload"
         :limit="1"
@@ -325,13 +334,13 @@ import {
   exportGrosslist,
   importTemplate,
   reduce,
-  clear, move
+  clear, move, sum
 } from '@/api/system/grosslist'
 import { getToken } from '@/utils/auth'
-import { listInvstatistics } from '@/api/system/invstatistics'
+import { listInvstatistics, sum as invsSum } from '@/api/system/invstatistics'
 import { addItem, listItem } from '@/api/system/item'
 
-import _ from 'lodash';
+import _ from 'lodash'
 
 export default {
   name: 'Grosslist',
@@ -401,13 +410,15 @@ export default {
       },
       standarditem: {
         datas: []
-      }
+      },
+      grossSum: 0,
+      invstatisticsSum: 0
     }
   },
   created() {
     this.getList()
     this.getInvstatisticsList()
-    this.debouncedNameInputHandle = _.debounce(this.nameInputHandle, 500);
+    this.debouncedNameInputHandle = _.debounce(this.nameInputHandle, 500)
   },
   methods: {
     handleImport() {
@@ -538,6 +549,7 @@ export default {
       this.$refs.upload.clearFiles()
       this.$alert(response.msg, '导入结果', { dangerouslyUseHTMLString: true })
       this.getList()
+      this.getSum()
     },
     //
     importTemplate() {
@@ -589,6 +601,7 @@ export default {
           this.msgSuccess('移动成功')
           this.getList()
           this.getInvstatisticsList()
+          this.getSum()
         })
       } else {
         this.msgError('请选择条目')
@@ -611,6 +624,7 @@ export default {
             this.resetParam()
             this.getList()
             this.getInvstatisticsList()
+            this.getSum()
           })
         } else {
           this.reduce.disabled = false
@@ -650,6 +664,7 @@ export default {
       }).then(() => {
         this.getList()
         this.getInvstatisticsList()
+        this.getSum()
         this.msgSuccess('清除成功')
       })
     },
@@ -662,7 +677,21 @@ export default {
     //
     rowSelected(row) {
       this.$refs.grosslistTable.toggleRowSelection(row)
+    },
+
+    //
+    getSum() {
+      sum().then(resp => {
+        this.grossSum = resp.data
+      })
+
+      invsSum().then(resp => {
+        this.invstatisticsSum = resp.data
+      })
     }
+  },
+  mounted() {
+    this.getSum()
   }
 }
 </script>

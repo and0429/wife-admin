@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ruoyi.system.domain.GrossProfitListStatistics;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 统计列Mapper接口
@@ -62,4 +63,10 @@ public interface GrossProfitListStatisticsMapper {
 
     @Delete("delete from b_gross_profit_list_statistics")
     void clear();
+
+    /**
+     * @return
+     */
+    @Select("select sum(amont_) from b_gross_profit_list_statistics")
+    Double amontSum();
 }

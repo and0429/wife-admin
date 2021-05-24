@@ -149,6 +149,12 @@ public class GrossProfitListServiceImpl implements IGrossProfitListService {
 
 
     @Override
+    public Double amontSum() {
+        return grossProfitListMapper.amontSum();
+    }
+
+
+    @Override
     public List<GrossProfitList> findInIds(List<Long> srcIds) {
         return grossProfitListMapper.findInIds(srcIds);
     }
