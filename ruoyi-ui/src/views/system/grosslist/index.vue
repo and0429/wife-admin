@@ -357,6 +357,7 @@ export default {
       reduce: {
         open: false,
         disabled: true,
+        currName: '',
         form: {},
         rules: {
           name: [
@@ -474,6 +475,9 @@ export default {
       this.ids = selection.map(item => item.id)
       this.single = selection.length !== 1
       this.multiple = !selection.length
+      if (selection.length) {
+        this.reduce.currName = selection[selection.length - 1].name
+      }
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -575,9 +579,9 @@ export default {
       this.loading = true
       this.reduce.form = {}
       this.reduce.disabled = false
-      listItem({
-        name: this.queryParams.name
-      }).then(respone => {
+      const name = this.reduce.currName || this.queryParams.name
+      console.log(name)
+      listItem({ name }).then(respone => {
         this.reduce.open = true
         this.standarditem.datas = respone.rows
         this.loading = false

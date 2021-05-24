@@ -58,7 +58,7 @@ public class GrossProfitListStatisticsController extends BaseController {
     @GetMapping("/export")
     public AjaxResult export(GrossProfitListStatistics grossProfitListStatistics) {
         List<GrossProfitListStatistics> list = grossProfitListStatisticsService.selectGrossProfitListStatisticsList(grossProfitListStatistics);
-        ExcelUtil<GrossProfitListStatistics> util = new ExcelUtil<GrossProfitListStatistics>(GrossProfitListStatistics.class);
+        ExcelUtil<GrossProfitListStatistics> util = new ExcelUtil<>(GrossProfitListStatistics.class);
         return util.exportExcel(list, "统计列数据");
     }
 

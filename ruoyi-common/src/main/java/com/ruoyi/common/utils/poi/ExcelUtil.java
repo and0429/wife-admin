@@ -20,25 +20,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.ruoyi.common.utils.spring.SpringUtils;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.ClientAnchor;
-import org.apache.poi.ss.usermodel.DataValidation;
-import org.apache.poi.ss.usermodel.DataValidationConstraint;
-import org.apache.poi.ss.usermodel.DataValidationHelper;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Drawing;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
@@ -550,7 +532,12 @@ public class ExcelUtil<T> {
                 } else if (StringUtils.isNotEmpty(dictType) && StringUtils.isNotNull(value)) {
                     cell.setCellValue(convertDictByExp(Convert.toStr(value), dictType, separator));
                 } else if (value instanceof BigDecimal && -1 != attr.scale()) {
-                    cell.setCellValue((((BigDecimal) value).setScale(attr.scale(), attr.roundingMode())).toString());
+                    cell.setCellType(CellType.NUMERIC);
+                    final CellStyle cellStyle = cell.getCellStyle();
+                    final DataFormat dataFormat = row.getSheet().getWorkbook().createDataFormat();
+                    cellStyle.setDataFormat(dataFormat.getFormat("##0.00"));
+                    cell.setCellStyle(cellStyle);
+                    cell.setCellValue((((BigDecimal) value).setScale(attr.scale(), attr.roundingMode())).doubleValue());
                 } else {
                     // 设置列类型
                     setCellVo(value, attr, cell);
