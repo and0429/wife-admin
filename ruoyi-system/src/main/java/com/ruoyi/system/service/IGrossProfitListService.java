@@ -71,7 +71,7 @@ public interface IGrossProfitListService {
     /**
      * @param params
      */
-    void redece(ReduceParams params);
+    void reduce(ReduceParams params);
 
     /**
      * @param srcIds
@@ -92,4 +92,5 @@ public interface IGrossProfitListService {
      */
     Double amontSum();
 
+    void autoReduce();
 }

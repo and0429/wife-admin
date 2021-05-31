@@ -32,7 +32,7 @@ public class GrossProfitList extends BaseEntity
     private String category;
 
     /** 单位 */
-    @Excel(name = "出售单位")
+    @Excel(name = "单位")
     private String unit;
 
     /** 实际数量 */

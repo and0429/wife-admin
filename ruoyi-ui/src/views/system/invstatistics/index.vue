@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="名称" prop="name">
+      <el-form-item label="商品" prop="name">
         <el-input
           v-model="queryParams.name"
-          placeholder="请输入名称"
+          placeholder="请输入商品"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -100,7 +100,7 @@
               @cell-click="celledit"
     >
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="名称" align="center" prop="name">
+      <el-table-column label="商品" align="center" prop="name">
         <template slot-scope="scope">
           <el-input v-if="scope.row.name.edit"
                     ref="name"
@@ -201,8 +201,8 @@
     <!-- 添加或修改统计列表对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body :close-on-click-modal="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入名称"/>
+        <el-form-item label="商品" prop="name">
+          <el-input v-model="form.name" placeholder="请输入商品"/>
         </el-form-item>
         <el-form-item label="规格" prop="format">
           <el-input v-model="form.format" placeholder="请输入规格"/>
@@ -279,7 +279,7 @@ export default {
       // 表单校验
       rules: {
         name: [
-          { required: true, message: '名称不能为空', trigger: 'blur' }
+          { required: true, message: '商品不能为空', trigger: 'blur' }
         ],
         format: [
           { required: true, message: '规格不能为空', trigger: 'blur' }

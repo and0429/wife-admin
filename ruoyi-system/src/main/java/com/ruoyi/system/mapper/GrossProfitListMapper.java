@@ -76,4 +76,6 @@ public interface GrossProfitListMapper {
 
     @Select("select sum(amont_) from b_gross_profit_list")
     Double amontSum();
+
+    List<GrossProfitList> findAll();
 }

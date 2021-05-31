@@ -24,7 +24,7 @@ public class GrossProfitListStatistics extends BaseEntity {
     /**
      * 名称
      */
-    @Excel(name = "名称")
+    @Excel(name = "商品")
     private String name;
 
     /**

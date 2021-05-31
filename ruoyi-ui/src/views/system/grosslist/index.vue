@@ -1,13 +1,13 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="名称" prop="name">
+      <el-form-item label="商品" prop="name">
         <el-input
-          v-model="queryParams.name"
-          placeholder="请输入名称"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
+            v-model="queryParams.name"
+            placeholder="请输入商品"
+            clearable
+            size="small"
+            @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <!--      <el-form-item label="规格" prop="format">-->
@@ -48,58 +48,47 @@
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
             <el-button
-              type="danger"
-              plain
-              icon="el-icon-delete"
-              size="mini"
-              @click="clear"
-              v-hasPermi="['system:grosslist:remove']"
-            >清空工作空间
+                type="danger"
+                plain
+                icon="el-icon-delete"
+                size="mini"
+                @click="clear"
+                v-hasPermi="['system:grosslist:remove']"
+            >清空
             </el-button>
           </el-col>
-          <!--          <el-col :span="1.5">-->
-          <!--            <el-button-->
-          <!--              type="primary"-->
-          <!--              plain-->
-          <!--              icon="el-icon-plus"-->
-          <!--              size="mini"-->
-          <!--              @click="handleAdd"-->
-          <!--              v-hasPermi="['system:grosslist:add']"-->
-          <!--            >新增-->
-          <!--            </el-button>-->
-          <!--          </el-col>-->
           <el-col :span="1.5">
             <el-button
-              type="success"
-              plain
-              icon="el-icon-edit"
-              size="mini"
-              :disabled="single"
-              @click="handleUpdate"
-              v-hasPermi="['system:grosslist:edit']"
+                type="primary"
+                plain
+                icon="el-icon-plus"
+                size="mini"
+                @click="autoReduce"
+                :disabled="disableAuto || grosslistList.length === 0"
+                v-hasPermi="['system:grosslist:add']"
+            >自动
+            </el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+                type="success"
+                plain
+                icon="el-icon-edit"
+                size="mini"
+                :disabled="single"
+                @click="handleUpdate"
+                v-hasPermi="['system:grosslist:edit']"
             >修改
             </el-button>
           </el-col>
-          <!--          <el-col :span="1.5">-->
-          <!--            <el-button-->
-          <!--              type="danger"-->
-          <!--              plain-->
-          <!--              icon="el-icon-delete"-->
-          <!--              size="mini"-->
-          <!--              :disabled="multiple"-->
-          <!--              @click="handleDelete"-->
-          <!--              v-hasPermi="['system:grosslist:remove']"-->
-          <!--            >删除-->
-          <!--            </el-button>-->
-          <!--          </el-col>-->
           <el-col :span="1.5">
             <el-button
-              type="info"
-              plain
-              icon="el-icon-upload2"
-              size="mini"
-              @click="handleImport"
-              v-hasPermi="['system:grosslist:add']"
+                type="info"
+                plain
+                icon="el-icon-upload2"
+                size="mini"
+                @click="handleImport"
+                v-hasPermi="['system:grosslist:add']"
             >导入
             </el-button>
           </el-col>
@@ -116,25 +105,25 @@
           <!--          </el-col>-->
           <el-col :span="1.5">
             <el-button
-              type="warning"
-              plain
-              icon="el-icon-document"
-              size="mini"
-              :disabled="multiple"
-              @click="reduceHandle"
-              v-hasPermi="['system:grosslist:add']"
+                type="warning"
+                plain
+                icon="el-icon-document"
+                size="mini"
+                :disabled="multiple"
+                @click="reduceHandle"
+                v-hasPermi="['system:grosslist:add']"
             >合并
             </el-button>
           </el-col>
           <el-col :span="1.5">
             <el-button
-              type="success"
-              plain
-              icon="el-icon-document"
-              size="mini"
-              :disabled="multiple"
-              @click="moveHandle"
-              v-hasPermi="['system:grosslist:add']"
+                type="success"
+                plain
+                icon="el-icon-document"
+                size="mini"
+                :disabled="multiple"
+                @click="moveHandle"
+                v-hasPermi="['system:grosslist:add']"
             >移动
             </el-button>
           </el-col>
@@ -150,7 +139,7 @@
                   @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="45" align="center"/>
-          <el-table-column label="名称" align="center" prop="name"/>
+          <el-table-column label="商品" align="center" prop="name"/>
           <el-table-column label="规格" align="center" prop="format"/>
           <el-table-column label="分类" align="center" prop="category"/>
           <el-table-column label="单位" align="center" prop="unit"/>
@@ -179,12 +168,12 @@
           <!--      </el-table-column>-->
         </el-table>
         <pagination
-          v-show="total>0"
-          :total="total"
-          :page-sizes="[10, 20, 30, 40, 50, 100, 500, 1000]"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
-          @pagination="getList"
+            v-show="total>0"
+            :total="total"
+            :page-sizes="[10, 20, 30, 40, 50, 100, 500, 1000]"
+            :page.sync="queryParams.pageNum"
+            :limit.sync="queryParams.pageSize"
+            @pagination="getList"
         />
       </el-col>
 
@@ -197,7 +186,7 @@
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" style="visibility: hidden"></right-toolbar>
         </el-row>
         <el-table v-loading="loading" :data="statistics.invstatisticsList">
-          <el-table-column label="名称" align="center" prop="name"/>
+          <el-table-column label="商品" align="center" prop="name"/>
           <el-table-column label="规格" align="center" prop="format"/>
           <el-table-column label="分类" align="center" prop="category"/>
           <el-table-column label="单位" align="center" prop="unit"/>
@@ -207,12 +196,12 @@
         </el-table>
 
         <pagination
-          v-show="statistics.total>0"
-          :total="statistics.total"
-          :page-sizes="[10, 20, 30, 40, 50, 100, 500, 1000]"
-          :page.sync="statistics.queryParams.pageNum"
-          :limit.sync="statistics.queryParams.pageSize"
-          @pagination="getInvstatisticsList"
+            v-show="statistics.total>0"
+            :total="statistics.total"
+            :page-sizes="[10, 20, 30, 40, 50, 100, 500, 1000]"
+            :page.sync="statistics.queryParams.pageNum"
+            :limit.sync="statistics.queryParams.pageSize"
+            @pagination="getInvstatisticsList"
         />
       </el-col>
     </el-row>
@@ -220,8 +209,8 @@
     <!-- 添加或修改毛利列表对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body :close-on-click-modal="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入名称"/>
+        <el-form-item label="商品" prop="name">
+          <el-input v-model="form.name" placeholder="请输入商品"/>
         </el-form-item>
         <el-form-item label="规格" prop="format">
           <el-input v-model="form.format" placeholder="请输入规格"/>
@@ -255,8 +244,8 @@
       </el-row>
       <el-row>
         <el-form :inline="true" ref="reduceForm" :model="reduce.form" :rules="reduce.rules" label-width="60px">
-          <el-form-item label="名称" prop="name">
-            <el-input v-model="reduce.form.name" placeholder="请输入名称" ref="reduceFormOfName"
+          <el-form-item label="商品" prop="name">
+            <el-input v-model="reduce.form.name" placeholder="请输入商品" ref="reduceFormOfName"
                       @input="debouncedNameInputHandle"
                       clearable
             />
@@ -279,7 +268,7 @@
                   @current-change="selectedStandardItem"
                   highlight-current-row
         >
-          <el-table-column label="名称" align="center" prop="name"/>
+          <el-table-column label="商品" align="center" prop="name"/>
           <el-table-column label="规格" align="center" prop="format"/>
           <el-table-column label="单位" align="center" prop="unit"/>
         </el-table>
@@ -294,16 +283,16 @@
                :close-on-click-modal="false"
     >
       <el-upload
-        ref="upload"
-        :limit="1"
-        accept=".xlsx, .xls"
-        :headers="upload.headers"
-        :action="upload.url + '?updateSupport=' + upload.updateSupport"
-        :disabled="upload.isUploading"
-        :on-progress="handleFileUploadProgress"
-        :on-success="handleFileSuccess"
-        :auto-upload="false"
-        drag
+          ref="upload"
+          :limit="1"
+          accept=".xlsx, .xls"
+          :headers="upload.headers"
+          :action="upload.url + '?updateSupport=' + upload.updateSupport"
+          :disabled="upload.isUploading"
+          :on-progress="handleFileUploadProgress"
+          :on-success="handleFileSuccess"
+          :auto-upload="false"
+          drag
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">
@@ -333,12 +322,12 @@ import {
   updateGrosslist,
   exportGrosslist,
   importTemplate,
-  reduce,
+  reduce, autoReduce,
   clear, move, sum
 } from '@/api/system/grosslist'
-import { getToken } from '@/utils/auth'
-import { listInvstatistics, sum as invsSum } from '@/api/system/invstatistics'
-import { addItem, listItem } from '@/api/system/item'
+import {getToken} from '@/utils/auth'
+import {listInvstatistics, sum as invsSum} from '@/api/system/invstatistics'
+import {addItem, listItem} from '@/api/system/item'
 
 import _ from 'lodash'
 
@@ -351,7 +340,7 @@ export default {
         title: '毛利列表导入',
         isUploading: false,
         updateSupport: 0,
-        headers: { Authorization: 'Bearer ' + getToken() },
+        headers: {Authorization: 'Bearer ' + getToken()},
         url: process.env.VUE_APP_BASE_API + '/system/grosslist/importData'
       },
       reduce: {
@@ -361,14 +350,15 @@ export default {
         form: {},
         rules: {
           name: [
-            { required: true, message: '名称不能为空', trigger: 'blur' }
+            {required: true, message: '商品不能为空', trigger: 'blur'}
           ],
           unit: [
-            { required: true, message: '单位不能为空', trigger: 'blur' }
+            {required: true, message: '单位不能为空', trigger: 'blur'}
           ]
         }
       },
       loading: true,
+      disableAuto: false,
       ids: [],
       single: true, // 非单个禁用
       multiple: true, // 非多个禁用
@@ -392,13 +382,13 @@ export default {
       // 表单校验
       rules: {
         name: [
-          { required: true, message: '名称不能为空', trigger: 'blur' }
+          {required: true, message: '商品不能为空', trigger: 'blur'}
         ],
         count: [
-          { required: true, message: '实际数量不能为空', trigger: 'blur' }
+          {required: true, message: '实际数量不能为空', trigger: 'blur'}
         ],
         amont: [
-          { required: true, message: '实际金额不能为空', trigger: 'blur' }
+          {required: true, message: '实际金额不能为空', trigger: 'blur'}
         ]
       },
       statistics: {
@@ -522,7 +512,7 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(function() {
+      }).then(function () {
         return delGrosslist(ids)
       }).then(() => {
         this.getList()
@@ -536,7 +526,7 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(function() {
+      }).then(function () {
         return exportGrosslist(queryParams)
       }).then(response => {
         this.download(response.msg)
@@ -551,7 +541,7 @@ export default {
       this.upload.open = false
       this.upload.isUploading = false
       this.$refs.upload.clearFiles()
-      this.$alert(response.msg, '导入结果', { dangerouslyUseHTMLString: true })
+      this.$alert(response.msg, '导入结果', {dangerouslyUseHTMLString: true})
       this.getList()
       this.getSum()
     },
@@ -569,7 +559,7 @@ export default {
     // 合并时候的name输入改变
     nameInputHandle() {
       let name = this.reduce.form.name
-      listItem({ name }).then(respone => {
+      listItem({name}).then(respone => {
         this.standarditem.datas = respone.rows
       })
     },
@@ -581,7 +571,7 @@ export default {
       this.reduce.disabled = false
       const name = this.reduce.currName || this.queryParams.name
       console.log(name)
-      listItem({ name }).then(respone => {
+      listItem({name}).then(respone => {
         this.reduce.open = true
         this.standarditem.datas = respone.rows
         this.loading = false
@@ -601,7 +591,7 @@ export default {
     moveHandle() {
       let srcIds = this.ids
       if (srcIds.length) {
-        move({ srcIds }).then(() => {
+        move({srcIds}).then(() => {
           this.msgSuccess('移动成功')
           this.getList()
           this.getInvstatisticsList()
@@ -610,6 +600,18 @@ export default {
       } else {
         this.msgError('请选择条目')
       }
+    },
+
+    // 自动合并
+    autoReduce() {
+      this.disableAuto = true;
+      autoReduce().then(d => {
+        this.msgSuccess('合并成功')
+        this.getList()
+        this.getInvstatisticsList()
+        this.getSum()
+        this.disableAuto = false
+      })
     },
 
     //
@@ -663,7 +665,7 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(function() {
+      }).then(function () {
         return clear()
       }).then(() => {
         this.getList()
@@ -675,7 +677,7 @@ export default {
 
     //
     selectedStandardItem(row) {
-      this.reduce.form = { ...row }
+      this.reduce.form = {...row}
     },
 
     //

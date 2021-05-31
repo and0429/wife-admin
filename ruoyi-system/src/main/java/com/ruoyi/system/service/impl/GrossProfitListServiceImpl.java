@@ -15,6 +15,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 毛利列表Service业务层处理
@@ -125,11 +130,36 @@ public class GrossProfitListServiceImpl implements IGrossProfitListService {
      * @param params
      */
     @Override
-    public void redece(ReduceParams params) {
+    public void reduce(ReduceParams params) {
         final List<Long> srcIds = params.getSrcIds();
         if (CollectionUtils.isEmpty(srcIds)) return;
         final List<GrossProfitList> gps = findInIds(srcIds);
         saveStatisticsAndUpdateRefId(gps, srcIds, params.getName(), params.getFormat(), params.getUnit());
+    }
+
+
+    @Override
+    public void autoReduce() {
+        List<GrossProfitList> all = grossProfitListMapper.findAll();
+        Map<String, List<GrossProfitList>> collect = all.stream()
+                .collect(Collectors.groupingBy(findFun()));
+        collect.forEach((k, v) -> {
+            List<Long> c = v.stream().map(GrossProfitList::getId)
+                    .collect(Collectors.toList());
+            String[] split = k.split("@");
+            saveStatisticsAndUpdateRefId(v, c, split[0], split[1], split[2]);
+
+        });
+    }
+
+
+    private Function<GrossProfitList, String> findFun() {
+        return gpl -> {
+            final String name = Objects.isNull(gpl.getName()) ? "" : gpl.getName();
+            final String format = Objects.isNull(gpl.getFormat()) ? "" : gpl.getFormat();
+            final String unit = Objects.isNull(gpl.getUnit()) ? "" : gpl.getUnit();
+            return name + "@" + format + "@" + unit;
+        };
     }
 
 

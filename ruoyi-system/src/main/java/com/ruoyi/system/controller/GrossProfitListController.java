@@ -53,8 +53,18 @@ public class GrossProfitListController extends BaseController {
      * @return
      */
     @PostMapping("/reduce")
-    public AjaxResult redece(@RequestBody ReduceParams params) {
-        grossProfitListService.redece(params);
+    public AjaxResult reduce(@RequestBody ReduceParams params) {
+        grossProfitListService.reduce(params);
+        return AjaxResult.success();
+    }
+
+
+    /**
+     * @return
+     */
+    @PostMapping("/reduce/auto")
+    public AjaxResult autoReduce() {
+        grossProfitListService.autoReduce();
         return AjaxResult.success();
     }
 

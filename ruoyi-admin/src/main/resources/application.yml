@@ -18,7 +18,7 @@ logging:
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/test-wife?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://lk.tudou66.com:10014/test-wife?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
     username: root
     password: sharewin888
     druid:
@@ -58,8 +58,9 @@ spring:
     restart:
       enabled: true
   redis:
-    host: localhost
-    port: 6379
+    host: lk.tudou66.com
+    port: 10013
+    database: 10
   messages:
     basename:  i18n/messages
 token:

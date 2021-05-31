@@ -51,6 +51,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+    <select id="findAll" resultMap="GrossProfitListResult">
+        <include refid="selectGrossProfitListVo" /> where statistics_id_ is null
+    </select>
+
     <insert id="insertGrossProfitList" parameterType="GrossProfitList" useGeneratedKeys="true">
         insert into b_gross_profit_list
         <trim prefix="(" suffix=")" suffixOverrides=",">
