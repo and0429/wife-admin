@@ -13,10 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -147,8 +144,11 @@ public class GrossProfitListServiceImpl implements IGrossProfitListService {
             List<Long> c = v.stream().map(GrossProfitList::getId)
                     .collect(Collectors.toList());
             String[] split = k.split("@");
-            saveStatisticsAndUpdateRefId(v, c, split[0], split[1], split[2]);
-
+            List<String> s = Arrays.stream(split).collect(Collectors.toList());
+            s.add("");
+            s.add("");
+            s.add("");
+            saveStatisticsAndUpdateRefId(v, c, s.get(0), s.get(1), s.get(2));
         });
     }
 

@@ -164,7 +164,7 @@ public class ExcelUtil<T> {
 
         if (rows > 0) {
             // 定义一个map用于存放excel列的序号和field.
-            Map<String, Integer> cellMap = new HashMap<String, Integer>();
+            Map<String, Integer> cellMap = new HashMap<>();
             // 获取表头
             Row heard = sheet.getRow(0);
             for (int i = 0; i < heard.getPhysicalNumberOfCells(); i++) {
@@ -374,8 +374,8 @@ public class ExcelUtil<T> {
         style.setBorderBottom(BorderStyle.THIN);
         style.setBottomBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
         Font dataFont = wb.createFont();
-        dataFont.setFontName("Arial");
-        dataFont.setFontHeightInPoints((short) 10);
+        dataFont.setFontName("宋体");
+        dataFont.setFontHeightInPoints((short) 14);
         style.setFont(dataFont);
         styles.put("data", style);
 
@@ -386,8 +386,8 @@ public class ExcelUtil<T> {
         style.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.getIndex());
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         Font headerFont = wb.createFont();
-        headerFont.setFontName("Arial");
-        headerFont.setFontHeightInPoints((short) 10);
+        headerFont.setFontName("宋体");
+        headerFont.setFontHeightInPoints((short) 14);
         headerFont.setBold(true);
         headerFont.setColor(IndexedColors.WHITE.getIndex());
         style.setFont(headerFont);
@@ -397,8 +397,8 @@ public class ExcelUtil<T> {
         style.setAlignment(HorizontalAlignment.CENTER);
         style.setVerticalAlignment(VerticalAlignment.CENTER);
         Font totalFont = wb.createFont();
-        totalFont.setFontName("Arial");
-        totalFont.setFontHeightInPoints((short) 10);
+        totalFont.setFontName("宋体");
+        totalFont.setFontHeightInPoints((short) 14);
         style.setFont(totalFont);
         styles.put("total", style);
 
