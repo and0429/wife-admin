@@ -216,7 +216,7 @@ public class GrossProfitListServiceImpl implements IGrossProfitListService {
         BigDecimal amount = BigDecimal.valueOf(0);
 
         final BigDecimal c = items.get(0).getCount();
-        final boolean hasCount = Objects.nonNull(c) && c.compareTo(BigDecimal.ZERO) == 0;
+        final boolean hasCount = Objects.nonNull(c) && c.compareTo(BigDecimal.ZERO) != 0;
 
         for (GrossProfitList item : items) {
             category = item.getCategory();
