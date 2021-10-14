@@ -214,9 +214,14 @@ public class GrossProfitListServiceImpl implements IGrossProfitListService {
         String category = "";
         BigDecimal count = BigDecimal.valueOf(0);
         BigDecimal amount = BigDecimal.valueOf(0);
+
+        final BigDecimal c = items.get(0).getCount();
+        final boolean hasCount = Objects.nonNull(c) && c.compareTo(BigDecimal.ZERO) == 0;
+
         for (GrossProfitList item : items) {
             category = item.getCategory();
-            count = count.add(item.getCount());
+            if (hasCount)
+                count = count.add(item.getCount());
             amount = amount.add(item.getAmont());
         }
         GrossProfitListStatistics gps = new GrossProfitListStatistics();
@@ -224,8 +229,10 @@ public class GrossProfitListServiceImpl implements IGrossProfitListService {
         gps.setFormat(format);
         gps.setCategory(category);
         gps.setUnit(unit);
-        gps.setCount(round(count));
-        gps.setPrice(getPrice(amount, count));
+        if (hasCount) {
+            gps.setCount(round(count));
+            gps.setPrice(getPrice(amount, count));
+        }
         gps.setAmont(round(amount));
         return gps;
     }
